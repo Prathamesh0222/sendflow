@@ -38,7 +38,7 @@ export const authOptions = {
           throw new Error("Password is incorrect");
         }
 
-        return { id: user.id, email: user.email };
+        return { id: user.id, email: user.email, username: user.username };
       },
     }),
   ],
