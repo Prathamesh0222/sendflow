@@ -37,13 +37,22 @@ export async function POST(req: NextRequest) {
         email,
         username,
         password: hashedPassword,
+        balance: 1 + Math.random() * 10000,
       },
     });
 
-    return NextResponse.json({
-      message: "User created successfully",
-      status: 201,
-    });
+    return NextResponse.json(
+      {
+        message: "User created successfully",
+        status: 201,
+        user: {
+          email: user.email,
+          username: user.username,
+          balance: user.balance,
+        },
+      },
+      {}
+    );
   } catch (error) {
     console.error("Error in creating user", error);
     return NextResponse.json({
