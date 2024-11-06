@@ -45,7 +45,7 @@ const SignIn = () => {
     });
     if (response?.ok) {
       toast.success("User logged in successfully");
-      router.push("/");
+      router.push("/dashboard");
     } else {
       toast.error("Error in logging user");
       console.error("Error in logging user", response);

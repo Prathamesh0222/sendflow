@@ -42,7 +42,6 @@ const SignUp = () => {
   const onSubmit = async (data: SignupInput) => {
     try {
       const response = await axios.post("/api/register", data);
-      console.log("Api response", response.data);
       if (response.data.status === 201) {
         await signIn("credentials", {
           redirect: false,
@@ -50,12 +49,11 @@ const SignUp = () => {
           password: data.password,
         });
         toast.success("User created successfully");
-        router.push("/");
+        router.push("/dashboard");
       } else {
         toast.error("Error in creating user");
         console.error("Error in creating user", response.data);
       }
-      console.log(data);
     } catch (error) {
       toast.error("Error in creating user");
       console.error("Error in creating user", error);
