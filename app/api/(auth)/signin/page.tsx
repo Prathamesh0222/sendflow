@@ -106,7 +106,7 @@ const SignIn = () => {
             </Button>
             <p className="text-center text-sm">
               Don't have an Account?{" "}
-              <a href="/api/signin" className="underline font-semibold">
+              <a href="/api/signup" className="underline font-semibold">
                 Signup
               </a>
             </p>
