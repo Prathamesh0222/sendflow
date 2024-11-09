@@ -1,13 +1,9 @@
-import Navbar from "@/components/Navbar";
-import Sidebar from "@/components/Sidebar";
+import Help from "./transaction/page";
+import Home from "./home/page";
+import Settings from "./settings/page";
 
 const Dashboard = () => {
-  return (
-    <div className="flex">
-      <Sidebar />
-      <Navbar />
-    </div>
-  );
+  return <div>Hi There</div>;
 };
 
 export default Dashboard;
