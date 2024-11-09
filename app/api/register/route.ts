@@ -41,18 +41,15 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    return NextResponse.json(
-      {
-        message: "User created successfully",
-        status: 201,
-        user: {
-          email: user.email,
-          username: user.username,
-          balance: user.balance,
-        },
+    return NextResponse.json({
+      message: "User created successfully",
+      status: 201,
+      user: {
+        email: user.email,
+        username: user.username,
+        balance: user.balance,
       },
-      {}
-    );
+    });
   } catch (error) {
     console.error("Error in creating user", error);
     return NextResponse.json({
