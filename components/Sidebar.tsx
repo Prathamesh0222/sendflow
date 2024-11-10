@@ -47,7 +47,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="flex h-screen">
+    <div className="flex min-h-screen">
       <div
         className={`border-r transition-all duration-300 ease-in-out transform ${
           expanded ? "translate-x-0 w-64" : "translate-x-0 w-18"
