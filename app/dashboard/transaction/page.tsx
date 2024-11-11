@@ -94,7 +94,7 @@ const Transactions = () => {
                     {user.username}
                   </TableCell>
                   <TableCell className="px-6 py-4 whitespace-nowrap text-right">
-                    <Button className="bg-blue-800 text-white">
+                    <Button className="bg-blue-800 text-white hover:bg-blue-950">
                       <Send />
                       Send Money
                     </Button>
@@ -109,26 +109,27 @@ const Transactions = () => {
         <Pagination>
           <PaginationContent>
             <PaginationItem>
-              <PaginationPrevious onClick={handlePrevPage} />
+              <PaginationPrevious
+                className="border cursor-pointer hover:bg-blue-800"
+                onClick={handlePrevPage}
+              />
             </PaginationItem>
             <PaginationItem>
-              <PaginationLink>1</PaginationLink>
+              <PaginationLink className="border cursor-pointer hover:bg-blue-800">
+                1
+              </PaginationLink>
             </PaginationItem>
             <PaginationItem>
               <PaginationEllipsis />
             </PaginationItem>
             <PaginationItem>
-              <PaginationNext onClick={handleNextPage} />
+              <PaginationNext
+                className="border cursor-pointer hover:bg-blue-800"
+                onClick={handleNextPage}
+              />
             </PaginationItem>
           </PaginationContent>
         </Pagination>
-
-        <Button onClick={handlePrevPage} disabled={page === 1}>
-          Previous
-        </Button>
-        <Button onClick={handleNextPage} disabled={page === totalPages}>
-          Next
-        </Button>
       </div>
     </div>
   );
