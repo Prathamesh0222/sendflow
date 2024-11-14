@@ -38,7 +38,12 @@ export const authOptions = {
           throw new Error("Password is incorrect");
         }
 
-        return { id: user.id, email: user.email, username: user.username };
+        return {
+          id: user.id,
+          email: user.email,
+          username: user.username,
+          balance: user.balance,
+        };
       },
     }),
   ],
@@ -52,6 +57,7 @@ export const authOptions = {
         token.id = user.id as string;
         token.email = user.email;
         token.username = user.username;
+        token.balance = user.balance;
       }
       return token;
     },
@@ -59,6 +65,7 @@ export const authOptions = {
       session.user.id = token.id as string;
       session.user.email = token.email;
       session.user.username = token.username;
+      session.user.balance = token.balance;
       return session;
     },
   },
