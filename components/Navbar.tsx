@@ -9,9 +9,7 @@ const Navbar = () => {
           <div className="-rotate-45">
             <CreditCard size={32} className="text-blue-800" />
           </div>
-          <h1 className="text-xl font-bold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
-            SendFlow
-          </h1>
+          <h1 className="text-xl font-bold">SendFlow</h1>
         </div>
         <UserDropdown />
       </div>
