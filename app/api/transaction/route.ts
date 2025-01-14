@@ -1,8 +1,19 @@
+import { authOptions } from "@/app/lib/auth";
 import prisma from "@/config/prisma";
+import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
-  const { receiverId, senderId, amount } = await req.json();
+  const session = await getServerSession(authOptions);
+  const { receiverId, amount } = await req.json();
+  const senderId = session?.user.id;
+
+  if (!senderId) {
+    return NextResponse.json({
+      message: "Sender ID is required",
+      status: 400,
+    });
+  }
 
   const sender = await prisma.user.findFirst({
     where: {
@@ -17,10 +28,7 @@ export async function POST(req: NextRequest) {
   });
 
   if (!sender || !receiver) {
-    return NextResponse.json({
-      message: "User not found",
-      status: 404,
-    });
+    throw new Error("User not found");
   }
 
   if (sender.balance < amount) {
@@ -41,21 +49,25 @@ export async function POST(req: NextRequest) {
         },
       });
 
-      await prisma.user.update({
+      const updatedSender = await prisma.user.update({
         where: {
           id: senderId,
         },
         data: {
-          balance: sender.balance - amount,
+          balance: {
+            decrement: amount,
+          },
         },
       });
 
-      await prisma.user.update({
+      const updatedReceiver = await prisma.user.update({
         where: {
           id: receiverId,
         },
         data: {
-          balance: receiver.balance + amount,
+          balance: {
+            increment: amount,
+          },
         },
       });
 

@@ -20,8 +20,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { Send } from "lucide-react";
-import { useSession } from "next-auth/react";
+import { CheckCircle2, Send } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -30,14 +29,24 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-
+import { Input } from "@/components/ui/input";
+import { toast } from "sonner";
+import { useSession, getSession } from "next-auth/react";
+import { PaymentDoneCheck } from "@/components/paymentDoneCheck";
 const Transactions = () => {
   interface UserProps {
+    id: string;
     email: string;
     username: string;
   }
 
   const [users, setUsers] = useState<UserProps[]>([]);
+  const [receiverId, setReceiverId] = useState<string>("");
+  const [amount, setAmount] = useState<string>("");
+  const [selectedUser, setSelectedUser] = useState<UserProps | null>(null);
+  const [transactionStatus, setTransactionStatus] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const limit = 5;
@@ -51,6 +60,30 @@ const Transactions = () => {
       setTotalPages(totalPages);
     } else {
       console.error("Error in fetching users", response);
+    }
+  };
+
+  const sendMoney = async () => {
+    setIsLoading(true);
+    try {
+      const response = await axios.post("/api/transaction", {
+        senderId: session.data?.user.id,
+        receiverId,
+        amount: parseFloat(amount),
+      });
+      if (response.status === 200) {
+        setTransactionStatus(true);
+        toast.success("Transaction successful");
+        setTimeout(() => {
+          setIsDialogOpen(false);
+          setTransactionStatus(false);
+        }, 2000);
+      }
+    } catch (error) {
+      console.error("Transaction Failed", error);
+      toast.error("Transaction Failed");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -95,8 +128,8 @@ const Transactions = () => {
               {users.map((user, index) => (
                 <TableRow key={index}>
                   <TableCell className="px-6 py-4 whitespace-nowrap">
-                    <div className=" rounded-full w-12 h-12 flex justify-center items-center bg-blue-800">
-                      {user.username}
+                    <div className=" rounded-full w-12 h-12 flex justify-center items-center border">
+                      {user.username[0]}
                     </div>
                   </TableCell>
                   <TableCell className="px-6 py-4 whitespace-nowrap">
@@ -106,27 +139,57 @@ const Transactions = () => {
                     {user.username}
                   </TableCell>
                   <TableCell className="px-6 py-4 whitespace-nowrap text-right">
-                    <Dialog>
-                      <DialogTrigger asChild>
-                        <Button className="bg-blue-800 text-white hover:bg-blue-950">
-                          <Send />
-                          Send Money
-                        </Button>
-                      </DialogTrigger>
+                    <Button
+                      onClick={() => {
+                        setSelectedUser(user);
+                        setIsDialogOpen(true);
+                      }}
+                      className="bg-blue-800 text-white hover:bg-blue-950"
+                    >
+                      <Send />
+                      Send Money
+                    </Button>
+                    <Dialog
+                      open={isDialogOpen}
+                      onOpenChange={(open) => {
+                        setIsDialogOpen(open);
+                        if (!open) {
+                          setSelectedUser(null);
+                          setAmount("");
+                        }
+                      }}
+                    >
+                      <DialogTrigger asChild></DialogTrigger>
                       <DialogContent>
                         <DialogHeader>
                           <div className="flex justify-center">
                             <div className="text-5xl rounded-full border w-28 h-28 items-center justify-center flex">
-                              {session.data?.user.username}
+                              {selectedUser?.username[0]}
                             </div>
                           </div>
-                          <DialogTitle>
-                            {session.data?.user.username}
-                          </DialogTitle>
+                          <DialogTitle>{selectedUser?.username}</DialogTitle>
                           <DialogDescription>
-                            {session.data?.user.email}
+                            {selectedUser?.email}
                           </DialogDescription>
                         </DialogHeader>
+                        <div className="space-y-3">
+                          <Input
+                            placeholder="Enter amount"
+                            value={amount}
+                            onChange={(e) => {
+                              setAmount(e.target.value);
+                            }}
+                            disabled={isLoading}
+                          />
+                          <Button
+                            onClick={sendMoney}
+                            disabled={isLoading}
+                            className="w-full"
+                          >
+                            {isLoading ? "Sending..." : "Send Money"}
+                          </Button>
+                        </div>
+                        {transactionStatus && <PaymentDoneCheck />}
                       </DialogContent>
                     </Dialog>
                   </TableCell>
