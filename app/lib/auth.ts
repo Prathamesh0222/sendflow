@@ -53,6 +53,19 @@ export const authOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     async jwt({ token, user }) {
+      const userData = await prisma.user.findUnique({
+        where: {
+          id: token.sub,
+        },
+        select: {
+          balance: true,
+        },
+      });
+
+      if (userData) {
+        token.balance = userData.balance;
+      }
+
       if (user) {
         token.id = user.id as string;
         token.email = user.email;
@@ -62,10 +75,25 @@ export const authOptions = {
       return token;
     },
     async session({ session, token }) {
-      session.user.id = token.id as string;
-      session.user.email = token.email;
-      session.user.username = token.username;
-      session.user.balance = token.balance;
+      try {
+        const user = await prisma.user.findUnique({
+          where: {
+            id: token.id,
+          },
+          select: {
+            balance: true,
+          },
+        });
+        if (user) {
+          session.user.id = token.id as string;
+          session.user.email = token.email;
+          session.user.username = token.username;
+          session.user.balance = token.balance;
+        }
+      } catch (error) {
+        console.error("Failed to fetch user balance:", error);
+      }
+
       return session;
     },
   },

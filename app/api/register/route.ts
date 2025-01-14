@@ -5,6 +5,7 @@ import bcrypt from "bcryptjs";
 
 export async function POST(req: NextRequest) {
   const data = await req.json();
+
   const result = await SignUpSchema.safeParse(data);
   if (!result.success) {
     return NextResponse.json({
@@ -32,7 +33,7 @@ export async function POST(req: NextRequest) {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = await prisma.user.create({
+    const newUser = await prisma.user.create({
       data: {
         email,
         username,
@@ -44,17 +45,12 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({
       message: "User created successfully",
       status: 201,
-      user: {
-        email: user.email,
-        username: user.username,
-        balance: user.balance,
-      },
     });
   } catch (error) {
     console.error("Error in creating user", error);
     return NextResponse.json({
-      message: "Something went wrong",
-      status: 500,
+      message: "Error while creating user",
+      status: 400,
     });
   }
 }

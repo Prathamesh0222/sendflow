@@ -49,7 +49,7 @@ const SignUp = () => {
           password: data.password,
         });
         toast.success("User created successfully");
-        router.push("/dashboard");
+        router.push("/dashboard/home");
       } else {
         toast.error("Error in creating user");
         console.error("Error in creating user", response.data);
