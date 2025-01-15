@@ -20,7 +20,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { CheckCircle2, Send } from "lucide-react";
+import { Send } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -31,7 +31,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import { useSession, getSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { PaymentDoneCheck } from "@/components/paymentDoneCheck";
 const Transactions = () => {
   interface UserProps {
@@ -142,6 +142,7 @@ const Transactions = () => {
                     <Button
                       onClick={() => {
                         setSelectedUser(user);
+                        setReceiverId(user.id);
                         setIsDialogOpen(true);
                       }}
                       className="bg-blue-800 text-white hover:bg-blue-950"
