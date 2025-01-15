@@ -1,5 +1,6 @@
-import { CreditCard, User } from "lucide-react";
+import { CreditCard } from "lucide-react";
 import UserDropdown from "./UserDropdown";
+import { ModeToggle } from "./mode-toggle";
 
 const Navbar = () => {
   return (
@@ -11,7 +12,10 @@ const Navbar = () => {
           </div>
           <h1 className="text-xl font-bold">SendFlow</h1>
         </div>
-        <UserDropdown />
+        <div className="items-center space-x-4 mr-4">
+          <ModeToggle />
+          <UserDropdown />
+        </div>
       </div>
     </div>
   );
