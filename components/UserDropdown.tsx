@@ -21,7 +21,7 @@ const UserDropdown = () => {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="border mx-12 p-3 rounded-full bg-blue-800 hover:bg-blue-900">
+      <DropdownMenuTrigger className="border mx-12 p-3 text-white rounded-full bg-blue-800 hover:bg-blue-900">
         <User />
       </DropdownMenuTrigger>
       <DropdownMenuContent>

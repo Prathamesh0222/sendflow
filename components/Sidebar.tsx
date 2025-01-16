@@ -110,7 +110,7 @@ const Sidebar = () => {
             <div key={index}>
               <Link href={icon.link}>
                 <div
-                  className={`flex gap-2 px-24  p-2.5 rounded-lg w-full ${
+                  className={`flex gap-2 p-2.5 rounded-lg w-full ${
                     pathname === icon.link
                       ? "bg-blue-800 text-white"
                       : "bg-background hover:bg-blue-800"
