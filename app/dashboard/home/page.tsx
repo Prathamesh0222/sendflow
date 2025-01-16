@@ -17,11 +17,25 @@ const Home = () => {
     return <div>No transactions found.</div>;
   }
 
+  const labels = transactions.map((txn) =>
+    new Date(txn.timestamp).toLocaleDateString()
+  );
+
+  const sentAmounts = Array(labels.length).fill(0);
+  const receivedAmounts = Array(labels.length).fill(0);
+
+  transactions.forEach((txn, index) => {
+    if (txn.sender.email === session?.user.email) {
+      sentAmounts[index] = txn.amount;
+    }
+    if (txn.receiver.email === session?.user.email) {
+      receivedAmounts[index] = txn.amount;
+    }
+  });
   const chartData = {
-    labels: transactions.map((txn) =>
-      new Date(txn.timestamp).toLocaleDateString()
-    ),
-    amounts: transactions.map((txn) => txn.amount),
+    labels: labels,
+    sentAmount: sentAmounts,
+    receivedAmount: receivedAmounts,
   };
 
   const totalMoneyDeducted = transactions
@@ -33,8 +47,8 @@ const Home = () => {
     .reduce((total, txn) => total + txn.amount, 0);
 
   return (
-    <div className="space-y-4">
-      <div className="flex gap-8 w-full">
+    <div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="p-8 border rounded-xl">
           <div>
             <span className="text-center font-bold">Your Balance</span>
@@ -50,7 +64,9 @@ const Home = () => {
           </div>
           <span className="text-2xl dark:text-red-500 text-red-700">
             {" "}
-            - ₹ {totalMoneyDeducted.toFixed(2)}
+            {totalMoneyDeducted > 0
+              ? "- ₹" + totalMoneyDeducted.toFixed(2)
+              : "₹" + totalMoneyDeducted.toFixed(2)}
           </span>
         </div>
         <div className="p-8 border rounded-xl">
@@ -59,63 +75,68 @@ const Home = () => {
           </div>
           <span className="text-2xl dark:text-green-500 text-green-700">
             {" "}
-            + ₹ {totalMoneyIncremented.toFixed(2)}
+            {totalMoneyIncremented > 0
+              ? "+ ₹" + totalMoneyIncremented.toFixed(2)
+              : "₹" + totalMoneyIncremented.toFixed(2)}
           </span>
         </div>
-      </div>
-      <div>
-        <Card className="w-[350px]">
-          <CardHeader>
-            <CardTitle>Recent Transactions</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {transactions.map((transaction) => {
-              const isReceived =
-                transaction.receiver.email === session?.user.email;
-              return (
-                <div
-                  className="flex justify-between items-center border-b p-4"
-                  key={transaction.id}
-                >
-                  <div>
-                    <p className="text-lg font-semibold">
-                      {isReceived
-                        ? `Received from: ${transaction.sender.username}`
-                        : `Sent to: ${transaction.receiver.username}`}
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      {transaction.status}
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      {new Date(transaction.timestamp).toLocaleString()}
-                    </p>
+        <div className="md:col-span-3 lg:col-span-1">
+          <Card>
+            <CardHeader>
+              <CardTitle>Recent Transactions</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {transactions.map((transaction) => {
+                const isReceived =
+                  transaction.receiver.email === session?.user.email;
+                return (
+                  <div
+                    className="flex justify-between items-center border-b p-4"
+                    key={transaction.id}
+                  >
+                    <div>
+                      <p className="text-lg font-semibold">
+                        {isReceived
+                          ? `Received from: ${transaction.sender.username}`
+                          : `Sent to: ${transaction.receiver.username}`}
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        {transaction.status}
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        {new Date(transaction.timestamp).toLocaleString()}
+                      </p>
+                    </div>
+                    {isReceived ? (
+                      <div className="flex items-center gap-2 text-green-500">
+                        <p>+ ₹{transaction.amount}</p>
+                        <span>
+                          <ChevronUp size={15} />
+                        </span>
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-2 text-red-500">
+                        <p>- ₹{transaction.amount}</p>
+                        <span>
+                          <ChevronDown size={15} />
+                        </span>
+                      </div>
+                    )}
                   </div>
-                  {isReceived ? (
-                    <div className="flex items-center gap-2 text-green-500">
-                      <p>+ ₹{transaction.amount}</p>
-                      <span>
-                        <ChevronUp size={15} />
-                      </span>
-                    </div>
-                  ) : (
-                    <div className="flex items-center gap-2 text-red-500">
-                      <p>- ₹{transaction.amount}</p>
-                      <span>
-                        <ChevronDown size={15} />
-                      </span>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
+                );
+              })}
+            </CardContent>
+          </Card>
+        </div>
+        <Card className="md:w-[752px] lg:w-[980px] w-[550px]">
+          <CardHeader className="text-2xl font-semibold">Data Graph</CardHeader>
+          <CardContent className="flex flex-col justify-center">
+            <div>
+              <TransactionChart data={chartData} />
+            </div>
           </CardContent>
         </Card>
       </div>
-      <Card>
-        <CardContent>
-          <TransactionChart data={chartData} />
-        </CardContent>
-      </Card>
     </div>
   );
 };
