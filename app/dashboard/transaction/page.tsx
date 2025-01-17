@@ -91,6 +91,10 @@ const Transactions = () => {
     fetchUsers(page);
   }, [page]);
 
+  useEffect(() => {
+    fetchUsers(page);
+  }, [page]);
+
   const handleNextPage = () => {
     if (page < totalPages) {
       setPage((prevPage) => prevPage + 1);
@@ -106,16 +110,10 @@ const Transactions = () => {
   return (
     <div className="container mx-auto p-4">
       <div className="overflow-x-auto">
-        <div className="min-w-full border rounded-xl shadow-md ">
-          <Table className="min-w-full rounded-xl">
+        <div className="max-w-7xl mx-auto border rounded-xl shadow-md ">
+          <Table className="">
             <TableHeader>
               <TableRow>
-                <TableHead className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Number
-                </TableHead>
-                <TableHead className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Email
-                </TableHead>
                 <TableHead className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Username
                 </TableHead>
@@ -128,15 +126,17 @@ const Transactions = () => {
               {users.map((user, index) => (
                 <TableRow key={index}>
                   <TableCell className="px-6 py-4 whitespace-nowrap">
-                    <div className=" rounded-full w-12 h-12 flex justify-center items-center border">
-                      {user.username[0]}
+                    <div className="flex gap-8 items-center">
+                      <div className="rounded-full w-12 h-12 flex justify-center items-center border">
+                        {user.username[0]}
+                      </div>
+                      <div className="font-semibold">
+                        {user.username} <br />
+                        <span className="text-muted-foreground hidden md:inline">
+                          {user.email}
+                        </span>
+                      </div>
                     </div>
-                  </TableCell>
-                  <TableCell className="px-6 py-4 whitespace-nowrap">
-                    {user.email}
-                  </TableCell>
-                  <TableCell className="px-6 py-4 whitespace-nowrap">
-                    {user.username}
                   </TableCell>
                   <TableCell className="px-6 py-4 whitespace-nowrap text-right">
                     <Button
@@ -148,7 +148,7 @@ const Transactions = () => {
                       className="bg-blue-800 text-white hover:bg-blue-950"
                     >
                       <Send />
-                      Send Money
+                      <span className="hidden md:inline">Send Money </span>
                     </Button>
                     <Dialog
                       open={isDialogOpen}
@@ -161,37 +161,42 @@ const Transactions = () => {
                       }}
                     >
                       <DialogTrigger asChild></DialogTrigger>
-                      <DialogContent>
-                        <DialogHeader>
-                          <div className="flex justify-center">
-                            <div className="text-5xl rounded-full border w-28 h-28 items-center justify-center flex">
-                              {selectedUser?.username[0]}
+                      {!transactionStatus ? (
+                        <DialogContent>
+                          <DialogHeader>
+                            <div className="flex justify-center">
+                              <div className="text-5xl rounded-full border w-28 h-28 items-center justify-center flex">
+                                {selectedUser?.username[0]}
+                              </div>
                             </div>
+                            <DialogTitle>{selectedUser?.username}</DialogTitle>
+                            <DialogDescription>
+                              {selectedUser?.email}
+                            </DialogDescription>
+                          </DialogHeader>
+                          <div className="space-y-3">
+                            <Input
+                              placeholder="Enter amount"
+                              value={amount}
+                              onChange={(e) => {
+                                setAmount(e.target.value);
+                              }}
+                              disabled={isLoading}
+                            />
+                            <Button
+                              onClick={sendMoney}
+                              disabled={isLoading}
+                              className="w-full"
+                            >
+                              {isLoading ? "Sending..." : "Send Money"}
+                            </Button>
                           </div>
-                          <DialogTitle>{selectedUser?.username}</DialogTitle>
-                          <DialogDescription>
-                            {selectedUser?.email}
-                          </DialogDescription>
-                        </DialogHeader>
-                        <div className="space-y-3">
-                          <Input
-                            placeholder="Enter amount"
-                            value={amount}
-                            onChange={(e) => {
-                              setAmount(e.target.value);
-                            }}
-                            disabled={isLoading}
-                          />
-                          <Button
-                            onClick={sendMoney}
-                            disabled={isLoading}
-                            className="w-full"
-                          >
-                            {isLoading ? "Sending..." : "Send Money"}
-                          </Button>
-                        </div>
-                        {transactionStatus && <PaymentDoneCheck />}
-                      </DialogContent>
+                        </DialogContent>
+                      ) : (
+                        <DialogContent>
+                          <PaymentDoneCheck />
+                        </DialogContent>
+                      )}
                     </Dialog>
                   </TableCell>
                 </TableRow>
