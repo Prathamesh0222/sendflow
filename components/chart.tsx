@@ -7,6 +7,7 @@ import {
   Tooltip,
   PointElement,
   LineElement,
+  Filler,
 } from "chart.js";
 
 import { Line } from "react-chartjs-2";
@@ -17,6 +18,7 @@ ChartJS.register(
   LinearScale,
   LineElement,
   Title,
+  Filler,
   Tooltip
 );
 

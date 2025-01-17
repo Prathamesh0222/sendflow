@@ -4,8 +4,8 @@ import { ModeToggle } from "./mode-toggle";
 
 const Navbar = () => {
   return (
-    <div className="w-full">
-      <div className="flex justify-between border-b p-4">
+    <div className="w-full border-b">
+      <div className="mx-auto flex justify-between  p-4">
         <div className="flex items-center gap-2">
           <div className="-rotate-45">
             <CreditCard size={32} className="text-blue-800" />

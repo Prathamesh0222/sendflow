@@ -3,7 +3,6 @@
 import { useState } from "react";
 import {
   ArrowLeftRight,
-  Home,
   LayoutDashboard,
   SquareChevronLeft,
   SquareChevronRight,
@@ -116,7 +115,8 @@ const Sidebar = () => {
                       : "bg-background hover:bg-blue-800"
                   }`}
                 >
-                  {icon.icon} <span>{icon.name}</span>
+                  {icon.icon}{" "}
+                  <span className="hidden md:inline">{icon.name}</span>
                 </div>
               </Link>
             </div>
