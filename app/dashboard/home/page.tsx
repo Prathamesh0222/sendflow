@@ -3,11 +3,26 @@
 import useRecentTxn from "@/app/hooks/useRecentTxn";
 import TransactionChart from "@/components/chart";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useSession } from "next-auth/react";
 const Home = () => {
   const { data: session } = useSession();
-  const { transactions, loading } = useRecentTxn();
+  const {
+    transactions,
+    loading,
+    page,
+    totalPages,
+    handlePageNext,
+    handlePagePrev,
+  } = useRecentTxn();
 
   if (loading) {
     return <div>loading...</div>;
@@ -126,9 +141,25 @@ const Home = () => {
                 );
               })}
             </CardContent>
+            <Pagination className="mb-3">
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious
+                    className="cursor-pointer"
+                    onClick={handlePagePrev}
+                  />
+                </PaginationItem>
+                <PaginationItem>
+                  <PaginationNext
+                    className=" cursor-pointer"
+                    onClick={handlePageNext}
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
           </Card>
         </div>
-        <Card className="md:w-[752px] lg:w-[980px] w-[550px]">
+        <Card className="md:w-[752px] lg:w-[980px] w-[550px] hidden md:block">
           <CardHeader className="text-2xl font-semibold">Data Graph</CardHeader>
           <CardContent className="flex flex-col justify-center">
             <div>

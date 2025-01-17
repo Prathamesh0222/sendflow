@@ -1,9 +1,9 @@
 import { authOptions } from "@/app/lib/auth";
 import prisma from "@/config/prisma";
 import { getServerSession } from "next-auth";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export const GET = async () => {
+export const GET = async (req: NextRequest) => {
   const session = await getServerSession(authOptions);
   const userId = session?.user.id;
 
@@ -19,6 +19,12 @@ export const GET = async () => {
   }
 
   try {
+    const { searchParams } = new URL(req.url);
+    const page = parseInt(searchParams.get("page") || "1");
+    const limit = parseInt(searchParams.get("limit") || "5");
+
+    const offset = (page - 1) * limit;
+
     const recentTransaction = await prisma.transaction.findMany({
       where: {
         OR: [
@@ -33,6 +39,8 @@ export const GET = async () => {
       orderBy: {
         timestamp: "desc",
       },
+      skip: offset,
+      take: limit,
       select: {
         id: true,
         amount: true,
@@ -53,9 +61,30 @@ export const GET = async () => {
       },
     });
 
+    const totalTransaction = await prisma.transaction.count({
+      where: {
+        OR: [
+          {
+            senderId: userId,
+          },
+          {
+            receiverId: userId,
+          },
+        ],
+      },
+    });
+
+    const totalPages = Math.ceil(totalTransaction / limit);
+
     return NextResponse.json(
       {
         recentTransaction,
+        pagination: {
+          page,
+          limit,
+          totalPages,
+          totalTransaction,
+        },
       },
       {
         status: 200,

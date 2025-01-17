@@ -14,14 +14,23 @@ interface Transaction {
 
 export default function () {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
+
+  const limit = 5;
 
   useEffect(() => {
     const fetchTransactions = async () => {
+      setLoading(true);
       try {
-        const response = await axios.get("/api/recentTransaction");
+        const response = await axios.get(
+          `/api/recentTransaction?page=${page}&limit=${limit}`
+        );
+        console.log(response.data);
         if (response.status === 200) {
           setTransactions(response.data.recentTransaction || []);
+          setTotalPages(response.data.pagination?.totalPages || 1);
         }
       } catch (error) {
         console.error("Failed to fetch transactions", error);
@@ -30,7 +39,26 @@ export default function () {
       }
     };
     fetchTransactions();
-  }, []);
+  }, [page]);
 
-  return { transactions, loading };
+  const handlePageNext = () => {
+    if (page < totalPages) {
+      setPage((next) => next + 1);
+    }
+  };
+
+  const handlePagePrev = () => {
+    if (page > 1) {
+      setPage((prev) => prev - 1);
+    }
+  };
+
+  return {
+    transactions,
+    loading,
+    page,
+    totalPages,
+    handlePageNext,
+    handlePagePrev,
+  };
 }
