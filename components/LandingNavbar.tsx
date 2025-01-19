@@ -1,5 +1,6 @@
 import { CreditCard } from "lucide-react";
 import { Button } from "./ui/button";
+import { ModeToggle } from "./mode-toggle";
 
 export const LandingNavbar = () => {
   return (
@@ -11,7 +12,8 @@ export const LandingNavbar = () => {
           </div>
           <h1 className="text-xl font-bold">SendFlow</h1>
         </div>
-        <div className="space-x-3">
+        <div className="space-x-3 items-center">
+          <ModeToggle />
           <Button>Login</Button>
           <Button>Register</Button>
         </div>

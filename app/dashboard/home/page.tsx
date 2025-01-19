@@ -64,7 +64,7 @@ const Home = () => {
   return (
     <div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="p-8 border rounded-xl">
+        <div className="p-8 border rounded-xl shadow-xl">
           <div>
             <span className="text-center font-bold">Your Balance</span>
           </div>
@@ -73,7 +73,7 @@ const Home = () => {
             ₹ {session?.user.balance.toFixed(2)}
           </span>
         </div>
-        <div className="p-8 border rounded-xl">
+        <div className="p-8 border rounded-xl shadow-xl">
           <div>
             <span className="text-center font-bold">Total Money Deducted</span>
           </div>
@@ -84,7 +84,7 @@ const Home = () => {
               : "₹" + totalMoneyDeducted.toFixed(2)}
           </span>
         </div>
-        <div className="p-8 border rounded-xl">
+        <div className="p-8 border rounded-xl shadow-xl">
           <div>
             <span className="text-center font-bold">Total Money Received</span>
           </div>
@@ -96,7 +96,7 @@ const Home = () => {
           </span>
         </div>
         <div className="md:col-span-3 lg:col-span-1">
-          <Card>
+          <Card className="shadow-xl">
             <CardHeader>
               <CardTitle>Recent Transactions</CardTitle>
             </CardHeader>
@@ -141,7 +141,7 @@ const Home = () => {
                 );
               })}
             </CardContent>
-            <Pagination className="mb-3">
+            <Pagination className="my-5">
               <PaginationContent>
                 <PaginationItem>
                   <PaginationPrevious
@@ -159,7 +159,7 @@ const Home = () => {
             </Pagination>
           </Card>
         </div>
-        <Card className="md:w-[752px] lg:w-[980px] w-[550px] hidden md:block">
+        <Card className="md:w-[752px] lg:w-[63vw] w-[550px] hidden md:block shadow-xl">
           <CardHeader className="text-2xl font-semibold">Data Graph</CardHeader>
           <CardContent className="flex flex-col justify-center">
             <div>
