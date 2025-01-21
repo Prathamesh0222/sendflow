@@ -4,8 +4,10 @@ import { CreditCard } from "lucide-react";
 import { Button } from "./ui/button";
 import { ModeToggle } from "./mode-toggle";
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 export const LandingNavbar = () => {
+  const router = useRouter();
   return (
     <motion.nav
       initial={{ y: -50, opacity: 0, filter: "blur(10px)" }}
@@ -27,8 +29,8 @@ export const LandingNavbar = () => {
           </div>
           <div className="flex space-x-3 items-center">
             <ModeToggle />
-            <Button>Login</Button>
-            <Button>Register</Button>
+            <Button onClick={() => router.push("/api/signin")}>Login</Button>
+            <Button onClick={() => router.push("/api/signup")}>Register</Button>
           </div>
         </div>
       </div>

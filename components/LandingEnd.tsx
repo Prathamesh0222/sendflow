@@ -4,10 +4,12 @@ import { MoveRight } from "lucide-react";
 import { Button } from "./ui/button";
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
+import { useRouter } from "next/navigation";
 
 export const LandingEnd = () => {
   const endRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(endRef, { once: true });
+  const router = useRouter();
   return (
     <motion.section
       ref={endRef}
@@ -32,7 +34,7 @@ export const LandingEnd = () => {
           transactions.
           <br /> Start sending money instantly today.
         </p>
-        <Button className="mb-10">
+        <Button onClick={() => router.push("/api/signin")} className="mb-10">
           Get Started Now{" "}
           <span>
             <MoveRight />
