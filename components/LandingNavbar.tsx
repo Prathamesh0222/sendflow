@@ -8,8 +8,14 @@ import { motion } from "framer-motion";
 export const LandingNavbar = () => {
   return (
     <motion.nav
-      initial={{ y: 50, opacity: 0, filter: "blur(10px)" }}
+      initial={{ y: -50, opacity: 0, filter: "blur(10px)" }}
       animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
+      transition={{
+        duration: 0.8,
+        delay: 0.2,
+        type: "spring",
+        stiffness: 100,
+      }}
     >
       <div className="p-4">
         <div className="flex justify-between">

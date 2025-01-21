@@ -1,3 +1,5 @@
+"use client";
+
 import {
   BarChart,
   CreditCard,
@@ -6,6 +8,8 @@ import {
   Percent,
   User,
 } from "lucide-react";
+import { motion, useInView } from "framer-motion";
+import { useRef } from "react";
 
 export const features = [
   {
@@ -46,14 +50,47 @@ export const features = [
 ];
 
 export const LandingFeature = () => {
+  const featureRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(featureRef, { once: true });
+
   return (
     <section>
-      <div>
+      <motion.div
+        ref={featureRef}
+        initial={{ y: 50, opacity: 0, filter: "blur(10px)" }}
+        animate={
+          isInView
+            ? { y: 0, opacity: 1, filter: "blur(0px)" }
+            : { y: 50, opacity: 0, filter: "blur(10px)" }
+        }
+        transition={{
+          duration: 0.8,
+          delay: 0.5,
+          type: "spring",
+          stiffness: 75,
+          damping: 10,
+        }}
+      >
         <h2 className="text-3xl text-center mt-20 mb-12">
           Why choose <span className="text-blue-500">Sendflow?</span>
         </h2>
-      </div>
-      <div className=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mb-4">
+      </motion.div>
+      <motion.div
+        ref={featureRef}
+        initial={{ y: 50, opacity: 0, filter: "blur(10px)" }}
+        animate={
+          isInView
+            ? { y: 0, opacity: 1, filter: "blur(0px)" }
+            : { y: 0, opacity: 0, filter: "blur(0px)" }
+        }
+        transition={{
+          duration: 0.8,
+          delay: 0.7,
+          type: "spring",
+          stiffness: 100,
+        }}
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mb-4"
+      >
         {features.map((feature, idx) => (
           <div key={idx} className="border p-4 rounded-lg">
             <div className="text-blue-500 mb-3">{feature.icon}</div>
@@ -61,7 +98,7 @@ export const LandingFeature = () => {
             <div>{feature.description}</div>
           </div>
         ))}
-      </div>
+      </motion.div>
     </section>
   );
 };
