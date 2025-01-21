@@ -20,7 +20,7 @@ export const authOptions = {
         email: { label: "Email", type: "text", placeholder: "abc@example.com" },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials: any): Promise<any> {
+      async authorize(credentials) {
         const result = await SignInSchema.safeParseAsync(credentials);
         const user = await prisma.user.findUnique({
           where: { email: result.data!.email },

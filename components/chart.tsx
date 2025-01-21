@@ -22,7 +22,13 @@ ChartJS.register(
   Tooltip
 );
 
-export default function TransactionChart({ data }: any) {
+interface ChartData {
+  labels: string[];
+  sentAmount: number[];
+  receivedAmount: number[];
+}
+
+export default function TransactionChart({ data }: { data: ChartData }) {
   const options = {
     plugins: {
       legend: {

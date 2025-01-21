@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
         },
       });
 
-      const updatedSender = await prisma.user.update({
+      await prisma.user.update({
         where: {
           id: senderId,
         },
@@ -60,7 +60,7 @@ export async function POST(req: NextRequest) {
         },
       });
 
-      const updatedReceiver = await prisma.user.update({
+      await prisma.user.update({
         where: {
           id: receiverId,
         },
@@ -93,7 +93,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({
       message: "Transaction failed",
       status: 500,
-      error: (error as any).message,
     });
   }
 }

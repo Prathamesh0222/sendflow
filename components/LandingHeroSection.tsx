@@ -1,7 +1,6 @@
 import { MouseIcon } from "lucide-react";
 import { LandingImage } from "./LandingImage";
 import { Button } from "./ui/button";
-import { motion } from "framer-motion";
 
 export const LandingHeroSection = () => {
   return (

@@ -12,7 +12,7 @@ interface Transaction {
   receiver: { username: string; email: string };
 }
 
-export default function () {
+export default function useRecentTxn() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);

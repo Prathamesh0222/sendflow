@@ -15,14 +15,8 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 import { useSession } from "next-auth/react";
 const Home = () => {
   const { data: session } = useSession();
-  const {
-    transactions,
-    loading,
-    page,
-    totalPages,
-    handlePageNext,
-    handlePagePrev,
-  } = useRecentTxn();
+  const { transactions, loading, handlePageNext, handlePagePrev } =
+    useRecentTxn();
 
   if (loading) {
     return <div>loading...</div>;

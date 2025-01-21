@@ -10,7 +10,7 @@ export const LandingImage = () => {
 
   useEffect(() => {
     setIsMounted(true);
-  });
+  }, []);
 
   if (!isMounted) {
     return (
